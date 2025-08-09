@@ -49,37 +49,28 @@ export default class Tree
         const left = node.left;
         const right = node.right;
 
+        let child = left ?? right ?? null;
+
         if( left && right ) {
             const {node: successorNode, parent: successorParent} = Tree.#findInOrderSuccessor(node);
-
-            node.data = successorNode.data;
 
             if( successorParent.left == successorNode )
                 successorParent.left = null;
             else if( successorParent.right == successorNode )
                 successorParent.right = null;
-        } else if( left ) {
-            if( !parent )
-                this.root = left;
-            else if( parent.left == node )
-                parent.left = left;
-            else if( parent.right == node )
-                parent.right = left;
-        } else if( right ) {
-            if( !parent )
-                this.root = right;
-            else if( parent.left == node )
-                parent.left = right;
-            else if( parent.right == node )
-                parent.right = right;
-        } else {
-            if( !parent )
-                this.root = null;
-            else if( parent.left == node )
-                parent.left = null;
-            else if( parent.right == node )
-                parent.right = null;
+
+            successorNode.left = node.left;
+            successorNode.right = node.right;
+
+            child = successorNode;        
         }
+
+        if( !parent )
+            this.root = child;
+        else if( parent.left == node )
+            parent.left = child;
+        else if( parent.right == node )
+            parent.right = child;
     }
 
     find(value)
@@ -145,6 +136,28 @@ export default class Tree
         this.postOrderForEach(callback, node.left);
         this.postOrderForEach(callback, node.right);
         callback(node);
+    }
+
+    height(value)
+    {
+        let startNode = this.find(value);
+
+        if( !startNode )
+            return null;
+
+
+    }
+
+    depth(value)
+    {
+        let endNode = this.find(value);
+
+        if( !endNode )
+            return null;
+    }
+
+    isBalanced()
+    {
     }
 
     static buildTree(array)
