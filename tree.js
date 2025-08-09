@@ -88,6 +88,65 @@ export default class Tree
         return node; 
     }
 
+    levelOrderForEach(callback, node = this.root)
+    {
+        if( !callback )
+            throw new Error("No callback was provided");
+
+        let queue = [node];
+
+        while( queue.length > 0 ) {
+            node = queue.shift();
+
+            if( !node )
+                continue;
+
+            callback(node);
+
+            queue.push(node.left);
+            queue.push(node.right);
+        }        
+    }
+
+    inOrderForEach(callback, node = this.root)
+    {
+        if( !callback )
+            throw new Error("No callback was provided");
+
+        if( !node )
+            return;
+
+        this.inOrderForEach(callback, node.left);
+        callback(node);
+        this.inOrderForEach(callback, node.right);
+    }
+
+    preOrderForEach(callback, node = this.root)
+    {
+        if( !callback )
+            throw new Error("No callback was provided");
+
+        if( !node )
+            return;
+
+        callback(node);
+        this.preOrderForEach(callback, node.left);
+        this.preOrderForEach(callback, node.right);
+    }
+
+    postOrderForEach(callback, node = this.root)
+    {
+        if( !callback )
+            throw new Error("No callback was provided");
+
+        if( !node )
+            return;
+
+        this.postOrderForEach(callback, node.left);
+        this.postOrderForEach(callback, node.right);
+        callback(node);
+    }
+
     static buildTree(array)
     {
         const len = array.length;

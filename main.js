@@ -28,3 +28,15 @@ tree.deleteItem(7);
 prettyPrint(tree.root);
 
 console.log(tree.find(5));
+
+console.log("Breadth-first level order transversal:");
+tree.levelOrderForEach(node => console.log(`    ${node.data}`));
+
+console.log("Depth-first in-order level transversal:");
+tree.inOrderForEach(node => console.log(`    ${node.data}`));
+
+console.log("Depth-first pre-order level transversal:");
+tree.preOrderForEach(node => console.log(`    ${node.data}`));
+
+console.log("Depth-first post-order level transversal:");
+tree.postOrderForEach(node => console.log(`    ${node.data}`));
