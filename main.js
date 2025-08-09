@@ -17,4 +17,8 @@ const prettyPrint = (node, prefix = '', isLeft = true) =>
     }
 };
 
-prettyPrint(new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]).root);
+let tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
+prettyPrint(tree.root);
+
+tree.insert(40);
+prettyPrint(tree.root);
