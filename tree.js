@@ -82,6 +82,12 @@ export default class Tree
         }
     }
 
+    find(value)
+    {
+        let {node} = Tree.#findInOrder(this.root, value);
+        return node; 
+    }
+
     static buildTree(array)
     {
         const len = array.length;

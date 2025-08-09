@@ -26,3 +26,5 @@ prettyPrint(tree.root);
 tree.deleteItem(7);
 tree.deleteItem(7);
 prettyPrint(tree.root);
+
+console.log(tree.find(5));
