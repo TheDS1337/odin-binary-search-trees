@@ -156,30 +156,35 @@ export default class Tree
             node = next.node;
             next = this.#findInOrder(value, node.right);
         }
-        
+
         return Tree.#longestPathBetweenNodes(this.root, node);
     }
 
-    isBalanced(node = this.root)
+    isBalanced(node = this.root, balanced = true)
     {
-        if( !node )
-            return true;
+        if( !balanced )
+            return false;
 
-        let lostBalance = false;
+        if( node ) {
+            this.levelOrderForEach((child) => {
+                if( !balanced )
+                    return;
 
-        this.levelOrderForEach((child) => {
-            if( Tree.#longestPathToLeafNode(child.left) - Tree.#longestPathToLeafNode(child.right) > 1 )
-                lostBalance = true;
-            else
-                lostBalance = this.isBalanced(child.left) && this.isBalanced(child.right);
-        }, node);
+                const left = child.left;
+                const right = child.right;
 
-        return !lostBalance;
+                if( Math.abs(Tree.#longestPathToLeafNode(left) - Tree.#longestPathToLeafNode(right)) > 1 )
+                    balanced = false;
+
+                balanced = this.isBalanced(left, balanced) && this.isBalanced(right, balanced);
+            }, node);
+        }
+
+        return balanced;
     }
 
     rebalance()
     {
-        console.log("rebalancing...");
         this.root = Tree.#buildTree(this.#buildArray());
     }
 

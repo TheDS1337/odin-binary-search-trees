@@ -16,7 +16,7 @@ const prettyPrint = (node, prefix = '', type = 0) =>
         prettyPrint(node.left, `${prefix}${type == 2 ? '    ' : type ==  1 ? '│   ' : ''}`, 2);
     }
 };
-
+/*
 let tree = new Tree([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]);
 prettyPrint(tree.root);
 
@@ -50,4 +50,32 @@ console.log(`Depth-first post-order level transversal: ${postOrder}`);
 
 console.log(tree.height(23));
 console.log(tree.depth(4));
-//console.log(tree.isBalanced());
+console.log(tree.isBalanced());
+*/
+
+
+
+
+function generateRandomIntArray(length, min, max) {
+  return Array.from({ length: length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
+}
+
+let tree2 = new Tree(Array.from({ length: 32 }, () => Math.floor(Math.random() * 100)));
+
+prettyPrint(tree2.root);
+console.log(`Is tree balanced?: ${tree2.isBalanced()}`);
+
+tree2.insert(149);
+tree2.insert(424);
+tree2.insert(111);
+tree2.insert(193);
+
+prettyPrint(tree2.root);
+console.log(`Is tree balanced after adding numbers?: ${tree2.isBalanced()}`);
+
+
+console.log("rebalancing...")
+tree2.rebalance();
+
+prettyPrint(tree2.root);
+console.log(`Is tree balanced after adding rebalancing?: ${tree2.isBalanced()}`);
