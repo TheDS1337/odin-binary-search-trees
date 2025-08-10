@@ -1,19 +1,19 @@
 import Tree from "./tree.js"
 
-const prettyPrint = (node, prefix = '', isLeft = true) =>
+const prettyPrint = (node, prefix = '', type = 0) =>
 {
     if (node === null) {
         return;
     }
 
     if (node.right !== null) {
-        prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+        prettyPrint(node.right, `${prefix}${type == 2 ? '│   '  : type == 1 ? '    ' : ''}`, 1);
     }
 
-    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    console.log(`${prefix}${type == 2 ? '└── ' : type == 1 ? '┌── ' : ''}${node.data}`);
 
     if (node.left !== null) {
-        prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+        prettyPrint(node.left, `${prefix}${type == 2 ? '    ' : type ==  1 ? '│   ' : ''}`, 2);
     }
 };
 
@@ -29,14 +29,21 @@ prettyPrint(tree.root);
 
 console.log(tree.find(5));
 
-console.log("Breadth-first level order transversal:");
-tree.levelOrderForEach(node => console.log(`    ${node.data}`));
+let levelOrder = [];
+tree.levelOrderForEach(node => levelOrder.push(node.data));
+console.log(`Breadth-first level order transversal: ${levelOrder}`);
 
-console.log("Depth-first in-order level transversal:");
-tree.inOrderForEach(node => console.log(`    ${node.data}`));
+let inOrder = [];
+tree.inOrderForEach(node => inOrder.push(node.data));
+console.log(`Depth-first in-order level transversal: ${inOrder}`);
 
-console.log("Depth-first pre-order level transversal:");
-tree.preOrderForEach(node => console.log(`    ${node.data}`));
+let preOrder = [];
+tree.preOrderForEach(node => preOrder.push(node.data));
+console.log(`Depth-first pre-order level transversal: ${preOrder}`);
 
-console.log("Depth-first post-order level transversal:");
-tree.postOrderForEach(node => console.log(`    ${node.data}`));
+let postOrder = [];
+tree.postOrderForEach(node => postOrder.push(node.data));
+console.log(`Depth-first post-order level transversal: ${postOrder}`);
+
+console.log(tree.height(23));
+console.log(tree.depth(4));

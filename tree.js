@@ -12,7 +12,7 @@ export default class Tree
 {
     constructor(array)
     {
-        this.root = Tree.buildTree(array.sort((a, b) => a - b));
+        this.root = Tree.#buildTree(array.sort((a, b) => a - b));
     }
 
     insert(value)
@@ -44,7 +44,7 @@ export default class Tree
 
     deleteItem(value)
     {
-        let {node, parent} = Tree.#findInOrder(this.root, value);
+        let {node, parent} = this.#findInOrder(value);
 
         const left = node.left;
         const right = node.right;
@@ -75,7 +75,7 @@ export default class Tree
 
     find(value)
     {
-        let {node} = Tree.#findInOrder(this.root, value);
+        let {node} = this.#findInOrder(value);
         return node; 
     }
 
@@ -140,27 +140,58 @@ export default class Tree
 
     height(value)
     {
-        let startNode = this.find(value);
+        let node = this.find(value);
 
-        if( !startNode )
+        if( !node )
             return null;
 
-
+        return Tree.#longestPathToLeafNode(node);
     }
 
     depth(value)
     {
-        let endNode = this.find(value);
+        let {node} = this.#findInOrder(value);
 
-        if( !endNode )
+        if( !node )
             return null;
+        
+        let {node: next} = this.#findInOrder(value, node.right);
+
+        while( next ) {
+            node = next;
+
+            const temp = this.#findInOrder(value, next.right);
+            if( !temp )
+                break;
+
+            next = temp.node;
+        }
+
+        return Tree.#longestPathBetweenNodes(this.root, node);
     }
 
     isBalanced()
     {
     }
 
-    static buildTree(array)
+    #findInOrder(value, node = this.root, parent = null)
+    {
+        if( !node )
+            return null;
+
+        let leftNode = this.#findInOrder(value, node.left, node);
+        if( leftNode && leftNode.node.data == value )
+            return leftNode;
+        
+        if( node.data == value )
+            return {node, parent};
+
+        let rightNode = this.#findInOrder(value, node.right, node);
+        if( rightNode && rightNode.node.data == value )
+            return rightNode;
+    }
+
+    static #buildTree(array)
     {
         const len = array.length;
 
@@ -170,27 +201,10 @@ export default class Tree
         const mid = Math.floor((len - 1) / 2);
         let root = new Node(array[mid]);
         
-        root.left = Tree.buildTree(array.slice(0, mid));
-        root.right = Tree.buildTree(array.slice(mid + 1));
+        root.left = Tree.#buildTree(array.slice(0, mid));
+        root.right = Tree.#buildTree(array.slice(mid + 1));
 
         return root;
-    }
-
-    static #findInOrder(node, value, parent = null)
-    {
-        if( !node )
-            return null;
-
-        let leftNode = Tree.#findInOrder(node.left, value, node);
-        if( leftNode && leftNode.node.data == value )
-            return leftNode;
-        
-        if( node.data == value )
-            return {node, parent};
-
-        let rightNode = Tree.#findInOrder(node.right, value, node);
-        if( rightNode && rightNode.node.data == value )
-            return rightNode;
     }
 
     static #findInOrderSuccessor(node) 
@@ -204,5 +218,24 @@ export default class Tree
         }
 
         return {node, parent};
+    }
+
+    static #longestPathToLeafNode(node)
+    {
+        if( !node )
+            return -1;
+
+        return 1 + Math.max(Tree.#longestPathToLeafNode(node.left), Tree.#longestPathToLeafNode(node.right));
+    }
+
+    static #longestPathBetweenNodes(node, child, distance = 0)
+    {
+        if( node == child )
+            return distance;
+
+        if( node.data > child.data )
+            return Tree.#longestPathBetweenNodes(node.left, child, ++distance);
+        else
+            return Tree.#longestPathBetweenNodes(node.right, child, ++distance);
     }
 }
