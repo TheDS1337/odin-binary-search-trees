@@ -23,6 +23,9 @@ prettyPrint(tree.root);
 tree.insert(40);
 prettyPrint(tree.root);
 
+tree.rebalance();
+prettyPrint(tree.root);
+
 tree.deleteItem(7);
 tree.deleteItem(7);
 prettyPrint(tree.root);
@@ -47,3 +50,4 @@ console.log(`Depth-first post-order level transversal: ${postOrder}`);
 
 console.log(tree.height(23));
 console.log(tree.depth(4));
+//console.log(tree.isBalanced());

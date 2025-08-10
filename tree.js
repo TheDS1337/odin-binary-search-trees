@@ -140,12 +140,7 @@ export default class Tree
 
     height(value)
     {
-        let node = this.find(value);
-
-        if( !node )
-            return null;
-
-        return Tree.#longestPathToLeafNode(node);
+        return Tree.#longestPathToLeafNode(this.find(value));
     }
 
     depth(value)
@@ -153,25 +148,39 @@ export default class Tree
         let {node} = this.#findInOrder(value);
 
         if( !node )
-            return null;
-        
-        let {node: next} = this.#findInOrder(value, node.right);
+            return 0;
+     
+        let next = this.#findInOrder(value, node.right);
 
-        while( next ) {
-            node = next;
-
-            const temp = this.#findInOrder(value, next.right);
-            if( !temp )
-                break;
-
-            next = temp.node;
+        while( next && next.node ) {
+            node = next.node;
+            next = this.#findInOrder(value, node.right);
         }
-
+        
         return Tree.#longestPathBetweenNodes(this.root, node);
     }
 
-    isBalanced()
+    isBalanced(node = this.root)
     {
+        if( !node )
+            return true;
+
+        let lostBalance = false;
+
+        this.levelOrderForEach((child) => {
+            if( Tree.#longestPathToLeafNode(child.left) - Tree.#longestPathToLeafNode(child.right) > 1 )
+                lostBalance = true;
+            else
+                lostBalance = this.isBalanced(child.left) && this.isBalanced(child.right);
+        }, node);
+
+        return !lostBalance;
+    }
+
+    rebalance()
+    {
+        console.log("rebalancing...");
+        this.root = Tree.#buildTree(this.#buildArray());
     }
 
     #findInOrder(value, node = this.root, parent = null)
@@ -207,6 +216,18 @@ export default class Tree
         return root;
     }
 
+    #buildArray(node = this.root, array = [])
+    {
+        if( !node )
+            return [];
+
+        array.concat(this.#buildArray(node.left, array));
+        array.push(node.data);
+        array.concat(this.#buildArray(node.right, array));
+
+        return array;
+    }
+
     static #findInOrderSuccessor(node) 
     {
         let parent = node;
@@ -230,7 +251,7 @@ export default class Tree
 
     static #longestPathBetweenNodes(node, child, distance = 0)
     {
-        if( node == child )
+        if( !node || !child || node == child )
             return distance;
 
         if( node.data > child.data )
