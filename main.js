@@ -53,13 +53,6 @@ console.log(tree.depth(4));
 console.log(tree.isBalanced());
 */
 
-
-
-
-function generateRandomIntArray(length, min, max) {
-  return Array.from({ length: length }, () => Math.floor(Math.random() * (max - min + 1)) + min);
-}
-
 let tree2 = new Tree(Array.from({ length: 32 }, () => Math.floor(Math.random() * 100)));
 
 prettyPrint(tree2.root);

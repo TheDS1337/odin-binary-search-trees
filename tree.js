@@ -160,10 +160,9 @@ export default class Tree
         return Tree.#longestPathBetweenNodes(this.root, node);
     }
 
-    isBalanced(node = this.root, balanced = true)
+    isBalanced(node = this.root)
     {
-        if( !balanced )
-            return false;
+        let balanced = true;
 
         if( node ) {
             this.levelOrderForEach((child) => {
@@ -176,7 +175,7 @@ export default class Tree
                 if( Math.abs(Tree.#longestPathToLeafNode(left) - Tree.#longestPathToLeafNode(right)) > 1 )
                     balanced = false;
 
-                balanced = this.isBalanced(left, balanced) && this.isBalanced(right, balanced);
+                balanced = balanced ?? (this.isBalanced(left) && this.isBalanced(right));
             }, node);
         }
 
