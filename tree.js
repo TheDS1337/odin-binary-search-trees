@@ -172,10 +172,12 @@ export default class Tree
                 const left = child.left;
                 const right = child.right;
 
-                if( Math.abs(Tree.#longestPathToLeafNode(left) - Tree.#longestPathToLeafNode(right)) > 1 )
+                if( Math.abs(Tree.#longestPathToLeafNode(left) - Tree.#longestPathToLeafNode(right)) > 1 ) {
                     balanced = false;
+                    return;
+                }
 
-                balanced = balanced ?? (this.isBalanced(left) && this.isBalanced(right));
+                balanced = this.isBalanced(left) && this.isBalanced(right);
             }, node);
         }
 
